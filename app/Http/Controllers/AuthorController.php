@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Author;
-use Illuminate\Http\Request;
+use App\Http\Requests\AuthorRequest;
+use App\Http\Resources\AuthorResource;
 
 class AuthorController extends Controller
 {
@@ -14,17 +15,10 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $author = Author::select('id', 'author')
+            ->paginate(5);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return AuthorResource::collection($author);
     }
 
     /**
@@ -33,53 +27,11 @@ class AuthorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AuthorRequest $request)
     {
-        //
+        $author = Author::create($request->validated());
+
+        return $author;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Author $author)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Author $author)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Author $author)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Author $author)
-    {
-        //
-    }
 }

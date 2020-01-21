@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Book;
-use Illuminate\Http\Request;
+use App\Http\Resources\BookResource;
+use App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
@@ -14,17 +15,10 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $book = Book::select('id', 'book')
+            ->paginate(5);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return BookResource::collection($book);
     }
 
     /**
@@ -33,7 +27,7 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
         //
     }
@@ -50,35 +44,13 @@ class BookController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Book $book)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Book $book)
+    public function update(BookRequest $request, Book $book)
     {
         //
     }

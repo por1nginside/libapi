@@ -16,3 +16,18 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('books', 'BookController')->only([
+    'index',
+    'show',
+    'store',
+    'update',
+]);
+Route::apiResource('authors', 'AuthorController')->only([
+    'index',
+    'store',
+]);
+Route::apiResource('categories', 'CategoryController')->only([
+    'index',
+    'store',
+]);
