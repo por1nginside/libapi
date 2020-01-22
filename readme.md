@@ -2,7 +2,7 @@
 
 ## About Laravel
 
-git clone   git@github.com:por1nginside/libapi.git
+git clone   https://github.com/por1nginside/libapi.git
 
 composer install<br />
 create .env and set db parameters <br />
