@@ -2,6 +2,16 @@
 
 ## About Laravel
 
+git clone   git@github.com:por1nginside/libapi.git
+
+composer install<br />
+create .env and set db parameters <br />
+php artisan key:generate<br />
+php artisan migrate<br />
+php artisan db:seed<br />
+
+php artisan serve  
+
 ## License
 
 The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
