@@ -12,81 +12,46 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function index(Request $request)
     {
-        $selectedColumns = [
-            'id',
-            'book',
-        ];
+        if (empty($request->all())) {
+            $book = Book::paginate(5);
+
+            return BookResource::collection($book);
+        }
         //search and sort on name book
         if ($request->has('book')) {
             $bookName = $request->book;
-            $queryBook = Book::select($selectedColumns)
-                ->where('book', 'like', '%' . $bookName . '%')
-                ->orderBy('book', 'asc')
-                ->paginate(5);
-            if ($request->has('sort')) {
-                $sort = $request->sort;
-                $queryBookSort = Book::select($selectedColumns)
-                    ->where('book', 'like', '%' . $request->book . '%')
-                    ->orderBy('book', $sort)
-                    ->paginate(5);
-                return BookResource::collection($queryBookSort);
-            }
+            $sortBookName = $request->sort;
+            $queryBook = Book::bookSearch($bookName, $sortBookName);
+
             return BookResource::collection($queryBook);
         }
         //search and sort on author
         if ($request->has('author')) {
             $author = $request->author;
-            $queryAuthor = Book::whereHas('authors', function ($query) use ($author) {
-                $query->where('author', 'like', '%' . $author . '%');
-            })
-                ->orderBy('book', 'asc')
-                ->paginate(5);
-            if ($request->has('sort')) {
-                $sortAuthors = $request->sort;
-                $queryAuthorSort = Book::whereHas('authors', function ($query) use ($author) {
-                    $query->where('author', 'like', '%' . $author . '%');
-                })
-                    ->orderBy('book', $sortAuthors)
-                    ->paginate(5);
-                return BookResource::collection($queryAuthorSort);
-            }
+            $sortAuthors = $request->sort;
+            $queryAuthor = Book::bookWithAuthor($author, $sortAuthors);
+
             return BookResource::collection($queryAuthor);
         }
         //search and sort on categories
         if ($request->has('category')) {
             $category = $request->category;
-            $queryCategory = Book::whereHas('categories', function ($query) use ($category) {
-                $query->where('category', 'like', '%' . $category . '%');
-            })
-                ->orderBy('book', 'asc')
-                ->paginate(5);
-            if ($request->has('sort')) {
-                $sortCategory = $request->sort;
-                $queryCategorySort = Book::whereHas('categories', function ($query) use ($category) {
-                    $query->where('category', 'like', '%' . $category . '%');
-                })
-                    ->orderBy('book', $sortCategory)
-                    ->paginate(5);
-                return BookResource::collection($queryCategorySort);
-            }
+            $sortCategory = $request->sort;
+            $queryCategory = Book::bookWithCategory($category, $sortCategory);
+
             return BookResource::collection($queryCategory);
         }
-
-        $book = Book::select($selectedColumns)
-            ->paginate(5);
-
-        return BookResource::collection($book);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function store(BookRequest $request)
     {
@@ -103,7 +68,7 @@ class BookController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Book $book
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function show(Book $book)
     {
@@ -115,7 +80,7 @@ class BookController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Book $book
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function update(BookRequest $request, Book $book)
     {
