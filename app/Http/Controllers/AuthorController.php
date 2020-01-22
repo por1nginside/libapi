@@ -24,14 +24,14 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(AuthorRequest $request)
     {
         $author = Author::create($request->validated());
 
-        return $author;
+        return new AuthorResource($author);
     }
 
 }

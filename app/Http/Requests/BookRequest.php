@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class BookRequest extends FormRequest
 {
@@ -24,15 +26,25 @@ class BookRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'book' => 'required|string',
+            'book.*' => 'required',
+            'authors.*' => 'required',
+            'categories.*' => 'required',
         ];
 
-        switch ($this->getMethod())
-        {
+        switch ($this->getMethod()) {
             case 'POST':
                 return $rules;
-//            case 'PUT':
+            case 'PUT':
+                return [
+                    'categories' => 'required',
+                ];
 //            case 'DELETE':
         }
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+        throw new HttpResponseException(response()->json($errors, 422));
     }
 }
